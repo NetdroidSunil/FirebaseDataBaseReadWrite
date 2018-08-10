@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sp.Pojo.UsersData;
 import com.sp.demofirebasedatabase.Utils.Config;
 import com.sp.demofirebasedatabase.Utils.Constant;
+import com.sp.demofirebasedatabase.Utils.TinyDB;
 import com.sp.sunilnetd.demofirebasedatabase.R;
 
 //http://www.devexchanges.info/2016/08/android-getting-started-with-firebase.html
@@ -35,12 +36,14 @@ public class LoginScreen extends AppCompatActivity {
     private ProgressDialog progressDialog;
     FirebaseDatabase fire_database;
     TextView tv_click_to_reg;
+    TinyDB sp_db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sp_db=new TinyDB(this);
 
         emailField = (TextInputLayout) findViewById(R.id.email_field);
         passwordField = (TextInputLayout) findViewById(R.id.password_field);
@@ -90,6 +93,8 @@ public class LoginScreen extends AppCompatActivity {
                         for (DataSnapshot ud : user.getChildren()) {
 
                             if (ud.getKey().equals("Password") && ud.getValue().equals(password)) {
+
+                                sp_db.putString(Constant.k_u_id,user.getKey());   //here user key is user id...
                                 Intent intent = new Intent(LoginScreen.this, HomeScreen.class);
                                 startActivity(intent);
                                 finish();
